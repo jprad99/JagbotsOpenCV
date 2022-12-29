@@ -1,0 +1,121 @@
+JagVision System Overview
+=========================
+Version 5.1
+=========================
+System Requirements:
+ - Linux based OS
+ - Python Packages
+	- flask
+	- numpy
+	- cv2 (OpenCV 2.x.x)
+	- math
+	- time
+	- collections
+		- namedtuples
+ - Network connectivity
+	- Port 1181 must be open
+ - USB Webcam
+
+=========================
+
+Neccessary Files:
+app.py
+camera_opencv.py
+cube_finder.py
+
+=========================
+
+Running JagVision:
+1. Open terminal
+2. Navigate to flask-streaming-server
+	a. Run this command: cd flask-streaming-server
+3. Create a CAMERA environment variable:
+	a. Run this command: export CAMERA=opencv
+4. Activate the camera server and begin processing
+	a. Run this command: python app.py
+5. The server is now running on 10.46.38.49:1181
+	a. In a future version the address will automatically change
+	b. For now it is whatever value is in the code
+
+=========================
+
+Accessing the stream:
+1. Open a browser
+2. Enter 10.46.38.49:1181 into the address bar
+3. The stream should now display
+
+=========================
+
+Explanation of the code (how it works):
+
+app.py starts the server which then calls
+upon the camera_opencv.py script to provide
+a JPG image to publish to a URL referenced
+in the HTML template used to generate the
+viewer page. If that doesn't make sense,
+it's okay, this is all backend stuff.
+
+The camera_opencv.py script activates the camera,
+and takes a picture. The picture is then sent
+to the cube_finder.py program, where it is run
+through a series of filters, and algorithms are
+run to determine useful information. The image
+is overlayed with a HUD, including crosshairs
+and distance data. All useful information is
+placed into a named tuple, which is returned.
+
+The returned tuple is then accessed in the
+camera_server.py script where the frame (image)
+is extracted from the tuple. The rest of the data
+remains unused at this point.
+
+Once the image is extracted from the tuple, it
+is then converted into a JPG and sent to app.py.
+
+This image is then published into the webpage
+where viewers can see the stream. This process
+occurs every 0.05 seconds, approximately. The
+result is a video in the viewing browser.
+
+=========================
+
+Future Improvements:
+
+Custom HTML template
+This will allow us to display our team logo
+and other information alongside the video,
+just for cosmetic beauty. HTML is an easy
+language to learn, so this should go
+smoothly.
+
+Renaming Files
+app.py will be replaced with something
+more specific.
+
+PyNetworkTables integration
+To send data to LabView (cringe) we will
+use PyNetworkTables, from the PyRobot Project.
+
+Exchange identification
+Make the program also look for and identify the
+Exchange using visual recognition algorithms
+
+Auto IP adjustments
+Check the IP of the host computer, and automatically
+set up the server on that address.
+
+Automatic HSV Filter settings
+Using a startup code, we can read the HSV values at the center
+of the frame, and do a +/- function to establish a range of
+colors for the specific field, without any manual input. Placing
+the cube at a standard distance is required for this.
+
+Camera Calibration
+The current code is optimized for a Logitech C922x series camera.
+Adjustments will be made to use the LifeCam HD-3000.
+
+Extensive Documentation
+As a senior, I worry that no underclassmen have taken up
+OpenCV yet. I want to write a detailed overview to allow
+future coders to understand the logic and functions used
+in this code.
